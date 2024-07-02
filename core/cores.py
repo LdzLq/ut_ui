@@ -1,7 +1,9 @@
 import csv
+import codecs
 import os
 import importlib.util
 import inspect
+import sys
 import unittest
 
 
@@ -47,6 +49,9 @@ def list_test_classes_and_methods(file_paths):
 
     :param file_paths: 包含.py文件路径的列表。
     """
+    class_module_dict = dict()
+    function_class_dict = dict()
+
     for path in file_paths:
         # 确保文件路径以.py结尾
         if not path.endswith('.py'):
@@ -65,11 +70,13 @@ def list_test_classes_and_methods(file_paths):
         for name, obj in inspect.getmembers(module):
             # 检查是否为类且类名以'Test'开头
             if inspect.isclass(obj) and name.startswith('Test'):
-                print(f"\n类名: {name} (来自文件: {path})")
+                class_module_dict[name] = module_name
                 # 获取并打印类的公共方法
                 for method_name, method in inspect.getmembers(obj, predicate=inspect.isfunction):
-                    if not method_name.startswith('_'):  # 过滤掉私有方法和特殊方法
-                        print(f"    方法名: {method_name}")
+                    if not method_name.startswith('_') and method_name.startswith('test'):  # 过滤掉私有方法和特殊方法
+                        function_class_dict[method_name] = name
+
+    return class_module_dict, function_class_dict
 
 
 def load_tests(class_module_map, method_class_map, methods_list):
@@ -81,7 +88,7 @@ def load_tests(class_module_map, method_class_map, methods_list):
     :param methods_list: 双层列表，内层为多个方法名列表。
     :return: 包含所有测试用例的测试套件列表。
     """
-    suites = []  # 用于存储所有测试套件的列表
+    suites = unittest.TestSuite()  # 用于存储所有测试套件的列表
     loader = unittest.TestLoader()  # 创建测试加载器
 
     for method_group in methods_list:
@@ -100,6 +107,9 @@ def load_tests(class_module_map, method_class_map, methods_list):
                 continue
 
             # 动态导入模块
+            package_path = os.path.join(os.getcwd(), 'TestCase')
+            if package_path not in sys.path:
+                sys.path.append(package_path)
             module = importlib.import_module(module_name)
 
             # 获取类并创建测试用例实例
@@ -116,7 +126,9 @@ def load_tests(class_module_map, method_class_map, methods_list):
                 print(f"警告: 无法加载测试 {module_name}.{class_name}.{method_name}。")
 
         if suite._tests:  # 如果该套件中有测试用例，将其添加到总列表中
-            suites.append(suite)
+            suites.addTest(suite)
+
+    print(suites)
 
     return suites
 
@@ -131,12 +143,12 @@ def read_test_cases_from_csv(file_path):
     test_cases_list = []  # 存储所有行数据的列表
 
     try:
-        with open(file_path, mode='r', encoding='utf-8') as csvfile:
+        with codecs.open(file_path, mode='r', encoding='utf-8-sig') as csvfile:
             csv_reader = csv.reader(csvfile)
             for row in csv_reader:
                 # 这里假设CSV文件中的每一行数据都是用例名，直接将每一行读取并存储为列表
                 # 如果一行中包含多个用例名，它们会自然地作为一个列表的元素存在
-                test_cases_list.append(row)
+                test_cases_list.append([item for item in row if item])
     except FileNotFoundError:
         print(f"错误: 文件 {file_path} 未找到。")
     except PermissionError:
@@ -145,3 +157,22 @@ def read_test_cases_from_csv(file_path):
         print(f"读取文件时发生未知错误: {e}")
 
     return test_cases_list
+
+
+if __name__ == '__main__':
+    csv_path = rf'D:\ProgramData\Code\github_projects\ut_ui\core\config\run_cases.csv'
+
+    test_case_fld_path = rf'D:\ProgramData\Code\github_projects\ut_ui\core\TestCase'
+
+    case_name_list = read_test_cases_from_csv(csv_path)
+
+    test_case_file_list = get_test_py_files(test_case_fld_path)
+    test_case_file_list = [rf'{test_case_fld_path}\{item}' for item in test_case_file_list]
+
+    class_module_dict, function_class_dict = list_test_classes_and_methods(test_case_file_list)
+
+    suite_list = load_tests(class_module_dict, function_class_dict, case_name_list)
+
+    runner = unittest.TextTestRunner()
+
+    runner.run(suite_list)

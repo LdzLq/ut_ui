@@ -5,13 +5,13 @@ from ddt import ddt, data, unpack
 from core.utils.read_json import ReadJsoner
 
 
-battle_data = ReadJsoner().read_json_file(rf'D:/Code/ut_ui/core/TestData/Battle.json')
+battle_data = ReadJsoner().read_json_file(rf'D:/ProgramData/Code/github_projects/ut_ui/core/TestData/Battle.json')
 
 
 @ddt
 class TestBattle(unittest.TestCase):
 
-    @data(ReadJsoner().read_json_file(rf'D:/Code/ut_ui/core/TestData/Battle.json'))
+    @data(battle_data)
     @unpack
     def test_start_battle(self, case_info, d):
         """测试开始战斗
