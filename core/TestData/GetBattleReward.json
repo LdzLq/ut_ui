@@ -1,0 +1,18 @@
+{
+    "test_get_battle_reward_1":{
+        "reward_name": "money",
+        "reward_number": 10000
+    },
+    "test_get_battle_reward_2":{
+        "reward_name": "car",
+        "reward_number": 10
+    },
+    "test_get_battle_reward_3":{
+        "reward_name": "house",
+        "reward_number": 5
+    },
+    "test_get_battle_reward_4":{
+        "reward_name": "food",
+        "reward_number": 10000000
+    }
+}

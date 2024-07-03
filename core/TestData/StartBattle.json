@@ -1,0 +1,22 @@
+{
+    "test_battle_1":{
+        "battle_name": "battle_1",
+        "people_number": 5,
+        "place": "香港"
+    },
+    "test_battle_2":{
+        "battle_name": "battle_2",
+        "people_number": 10,
+        "place": "澳门"
+    },
+    "test_battle_3":{
+        "battle_name": "battle_1",
+        "people_number": 1,
+        "place": "北京"
+    },
+    "test_battle_4":{
+        "battle_name": "battle_2",
+        "people_number": 100,
+        "place": "天津"
+    }
+}
