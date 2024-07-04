@@ -2,7 +2,7 @@ import unittest
 
 from ddt import ddt, data, unpack
 
-from core.cores.read_data import JsonReader
+from core.cores.data_driver import JsonReader
 
 
 START_BATTLE = JsonReader(rf'D:/Code/github_projects/ut_ui/', rf'core/TestData/StartBattle.json').change_json_content_for_ddt()
