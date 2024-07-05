@@ -1,18 +1,18 @@
 {
     "test_skill_buff_1":{
-        "skill_name": "battle_1",
+        "skill_name": "skill_buff_1",
         "skill_power_number": 10
     },
     "test_skill_buff_2":{
-        "skill_name": "battle_2",
+        "skill_name": "skill_buff_2",
         "skill_power_number": 80
     },
     "test_skill_buff_3":{
-        "battle_name": "battle_1",
+        "battle_name": "skill_buff_3",
         "skill_power_number": 100
     },
     "test_skill_buff_4":{
-        "skill_name": "battle_2",
+        "skill_name": "skill_buff_4",
         "skill_power_number": 10000
     }
 }
