@@ -12,11 +12,15 @@ class CSVDriver:
     def read_test_cases_from_csv(self):
         """读取CSV文件，每行数据转换为一个列表，如果一行中有多个测试用例名，则作为一个列表存储。"""
         test_cases_list = []
+        try:
+            with codecs.open(self.csv_path, mode='r', encoding='utf-8-sig') as csvfile:
+                csv_reader = csv.reader(csvfile)
+                for row in csv_reader:
+                    test_cases_list.append([item for item in row if item])
 
-        with codecs.open(self.csv_path, mode='r', encoding='utf-8-sig') as csvfile:
-            csv_reader = csv.reader(csvfile)
-            for row in csv_reader:
-                test_cases_list.append([item for item in row if item])
+        except Exception as e:
+            print(f"读取csv文件存在错误，错误内容：{e}")
+            test_cases_list = []
 
         return test_cases_list
 

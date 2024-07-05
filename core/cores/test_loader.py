@@ -112,6 +112,9 @@ class TestLoader:
         """动态加载测试用例"""
         test_case_lists = CSVDriver(csv_file_absolute_path).read_test_cases_from_csv()
 
+        if not test_case_lists:
+            test_case_lists = self.get_test_case_names()
+
         test_suites = self.__add_tests(test_case_lists)
 
         return test_suites

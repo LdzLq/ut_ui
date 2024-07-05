@@ -2,12 +2,12 @@ import unittest
 
 from ddt import ddt, data, unpack
 
-from core.cores.data_driver import JsonReader
+from core.cores.data_driver import JsonDriver
 
 
-START_BATTLE = JsonReader(rf'D:/Code/github_projects/ut_ui/', rf'core/TestData/StartBattle.json').change_json_content_for_ddt()
-SKILL_BUFF = JsonReader(rf'D:/Code/github_projects/ut_ui/', rf'core/TestData/SkillBuff.json').change_json_content_for_ddt()
-GET_BATTLE_REWARD = JsonReader(rf'D:/Code/github_projects/ut_ui/', rf'core/TestData/GetBattleReward.json').change_json_content_for_ddt()
+START_BATTLE = JsonDriver(rf'D:/Code/github_projects/ut_ui/core/TestData/StartBattle.json').change_json_content_for_ddt()
+SKILL_BUFF = JsonDriver(rf'D:/Code/github_projects/ut_ui/core/TestData/SkillBuff.json').change_json_content_for_ddt()
+GET_BATTLE_REWARD = JsonDriver(rf'D:/Code/github_projects/ut_ui/core/TestData/GetBattleReward.json').change_json_content_for_ddt()
 
 
 @ddt
